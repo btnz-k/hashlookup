@@ -1,4 +1,5 @@
 # hashlookup
+```
 HASH LOOKUP SCRIPT
 
   Flags:
@@ -10,5 +11,5 @@ HASH LOOKUP SCRIPT
   Usage:
   ./hashlookup.sh -d client.dit -h cracked_hashes.txt -u admin
         This will search for any usernames that contain the word "admin"
-        All fields are required!
-
+        All flags are required!
+```
