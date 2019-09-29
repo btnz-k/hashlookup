@@ -3,7 +3,7 @@
 # Script used to find password for user given cracked hashes, dit file, and username
 #
 # Written by BTNZ 
-# v1.0.2019.09.27
+# v1.0.2019.09.28
 #
 ####################################################################################################################
 
