@@ -11,10 +11,10 @@
                               in username:hash:password format
 
   Usage:
-  ./hashlookup.sh -d client.dit -h cracked_hashes.txt -u admin
+  ./hashlookup.sh -d client.dit -c cracked_hashes.txt -u admin
         This will search for any usernames that contain the word "admin"
         All fields are required!
 
-  ./hashlookup.sh -d client.dit -h cracked_hashes.txt -o ./user_pass.txt
+  ./hashlookup.sh -d client.dit -c cracked_hashes.txt -o ./user_pass.txt
         This will merge the DIT and cracked hash file, in user:hash:pass format
 ```
