@@ -92,7 +92,8 @@ if [ ! -z "$OUTFILE" ]; then
                 HASH=($( echo $l | cut -d":" -f1 ))
                 PASS=($( echo $l | cut -d":" -f2 ))
                 MERGED="$HASH:$PASS"
-                sed -i 's,'"$HASH"','"$MERGED"',g' "/tmp/$FILENAME"
+                #sed -i 's,'"$HASH"','"$MERGED"',g' "/tmp/$FILENAME"
+                sed -i 's,'"$HASH"','"${MERGED//&/\\&}"',g' "/tmp/$FILENAME"
         done
         mv -f "/tmp/$FILENAME" "$OUTFILE"
         printf "\n%s\n\n" " [-] Export complete!"
