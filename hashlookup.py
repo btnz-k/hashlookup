@@ -30,6 +30,7 @@ WarnSymbol=(Fore.YELLOW + ' [W] ' + Style.RESET_ALL)
 ErrorSymbol=(Fore.RED + ' [!] ' + Style.RESET_ALL)
 InfoSymbol=(Fore.BLUE + ' [i] ' + Style.RESET_ALL)
 SuccessSymbol=(Fore.GREEN + ' [+] ' + Style.RESET_ALL)
+HashSymbol=(Fore.YELLOW + ' [-] ' + Style.RESET_ALL)
 LoggingFormat='%(message)s'
 logging.basicConfig(format=LoggingFormat,level=args.loglevel)
 
@@ -64,6 +65,10 @@ except IOError:
     logging.error(ErrorSymbol + "Could not open cracked file: " + args.cracked_file)
     quit()
 
+# Sort lines
+opened_dit_file.sort()
+opened_cracked_file.sort()
+
 # Check for Output vs User
 
 # If output, merge and quit
@@ -97,7 +102,7 @@ for line in opened_dit_file:
                 break
         # Print the user:hash or user:hash:pass
         if userpass is "":
-            userinfo = WarnSymbol  + cutline[0] + ":" + Fore.YELLOW + cutline[3] + Style.RESET_ALL
+            userinfo = HashSymbol  + cutline[0] + ":" + Fore.YELLOW + cutline[3] + Style.RESET_ALL
         else:
             userinfo = SuccessSymbol + cutline[0] + ":" + Fore.GREEN + userpass + Style.RESET_ALL
         logging.warn(userinfo)
