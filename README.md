@@ -1,20 +1,14 @@
 # hashlookup
 ```
- HASH LOOKUP SCRIPT
+usage: hashlookup.py [-h] (-u USER | -o OUTPUT) [-v] dit_file cracked_file
 
-  Flags:
-      -?                      Display this help message
-      -d <dit file>           Path to NTDS DIT file
-      -c <cracked hash file>  Path to cracked hash file
-      -u <username>           Designates username/partial username to search for
-      -o <filename>           Merges the username and password and exports to <filename>
-                              in username:hash:password format
+positional arguments:
+  dit_file                    Path to DIT/NTDS File
+  cracked_file                Path to Cracked Hash File (hash:pass format)
 
-  Usage:
-  ./hashlookup.sh -d client.dit -c cracked_hashes.txt -u admin
-        This will search for any usernames that contain the word "admin"
-        All fields are required!
-
-  ./hashlookup.sh -d client.dit -c cracked_hashes.txt -o ./user_pass.txt
-        This will merge the DIT and cracked hash file, in user:hash:pass format
+optional arguments:
+  -h, --help                  show this help message and exit
+  -u USER, --user USER        Username to Search
+  -o OUTPUT, --output OUTPUT  Output Path for Merged Document
+  -v, --verbose               Increase Verbosity
 ```
