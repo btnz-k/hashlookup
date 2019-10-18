@@ -1,9 +1,10 @@
 #!/bin/bash
 
+####################################################################################################################
 # Script used to find password for user given cracked hashes, dit file, and username
 #
 # Written by BTNZ 
-# v1.0.2019.09.28
+# v1.0.2019.10.17
 #
 ####################################################################################################################
 
@@ -103,18 +104,30 @@ fi
 [[ -z "$USERNAME" ]] && { printf "\n${RED}%s${NOCOLOR}%s\n" " [!] " "Error: Missing required parameters!"; printf '\n%s' "$HELP"; exit 1; }
 
 # MAKE SURE USER EXISTS IN DIT
-FOUNDUSER=($( cat "$DITFILE" | cut -d":" -f1 | grep -v "\\$" | grep -i "$USERNAME"))
+FOUNDUSER=($( cat "$DITFILE" | cut -d":" -f1 | sort -f | grep -v "\\$" | grep -i "$USERNAME"))
 [ "${#FOUNDUSER[@]}" -eq "0" ] && { printf "\n${YELLOW}%s${NOCOLOR}%s\n\n" " [!] " "User does not exist in DIT! Username: $USERNAME"; exit 1; } || { printf "\n%s\n\n" " [-] Found ${#FOUNDUSER[@]} matching usernames!"; }
 
 # LOOP THROUGH FOUND LINES AND PRINT USERNAME AND PASSWORD OR HASH
 for r in "${FOUNDUSER[@]}"; do
+        # FIND LINES THAT MATCH USERNAME IN DIT
         LINE=($( grep -iF "$r" "$DITFILE" | cut -d":" -f1,4 ))
-        HASH=($( echo $LINE | cut -d":" -f2 ))
-        USER=($( echo $LINE | cut -d":" -f1 ))
-        PASS=($( grep -iF "$HASH" "$HASHFILE" | cut -d":" -f2 ))
-
-        # PRINT HASH IF NO PASSWORD FOUND, OTHERWISE PRINT PASSWORD
-        [ -z "$PASS" ] && { printf "${YELLOW}%s${NOCOLOR}%s${YELLOW}%s${NOCOLOR}\n" " [/] " "Hash for $USER >> " "$HASH"; } || { printf "${GREEN}%s${NOCOLOR}%s${GREEN}%s${NOCOLOR}\n" " [+] " "Pass for $USER >> " "$PASS"; }
+        # CHECK TO SEE IF MULTIPLE RESULTS
+        if [[ "$(declare -p LINE)" =~ "declare -a" ]]; then
+                # ARRAY OF RESULTS
+                for i in "${LINE[@]}"; do
+                        HASH=($( echo "$i" | cut -d":" -f2 ))
+                        USER=($( echo "$i" | cut -d":" -f1 ))
+                        PASS=($( grep -iF "$HASH" "$HASHFILE" | cut -d":" -f2 ))
+                        # PRINT HASH IF NO PASSWORD FOUND, OTHERWISE PRINT PASSWORD
+                        [ -z "$PASS" ] && { printf "${YELLOW}%s${NOCOLOR}%s${YELLOW}%s${NOCOLOR}\n" " [/] " "Hash for $USER >> " "$HASH"; } || { printf "${GREEN}%s${NOCOLOR}%s${GREEN}%s${NOCOLOR}\n" " [+] " "Pass for $USER >> " "$PASS"; }
+                done
+        else # NOT AN ARRAY, SINGLE RETURN
+                HASH=($( echo "$LINE" | cut -d":" -f2 ))
+                USER=($( echo "$LINE" | cut -d":" -f1 ))
+                PASS=($( grep -iF "$HASH" "$HASHFILE" | cut -d":" -f2 ))
+                # PRINT HASH IF NO PASSWORD FOUND, OTHERWISE PRINT PASSWORD
+                [ -z "$PASS" ] && { printf "${YELLOW}%s${NOCOLOR}%s${YELLOW}%s${NOCOLOR}\n" " [/] " "Hash for $USER >> " "$HASH"; } || { printf "${GREEN}%s${NOCOLOR}%s${GREEN}%s${NOCOLOR}\n" " [+] " "Pass for $USER >> " "$PASS"; }
+        fi
 done
 
 echo ""
