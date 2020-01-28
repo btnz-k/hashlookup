@@ -21,7 +21,7 @@ parser.add_argument("dit_file", help="Path to DIT/NTDS File")
 parser.add_argument("cracked_file", help="Path to Cracked Hash File (hash:pass format)")
 group = parser.add_mutually_exclusive_group(required=True)
 group.add_argument("-u", "--user", help="Username to Search")
-#group.add_argument("-o", "--output", help="Output Path for Merged Document")
+group.add_argument("-o", "--output", help="Output Path for Merged Document")
 parser.add_argument("-v","--verbose", help="Increase Verbosity", action="store_const", dest="loglevel", const=logging.INFO, default=logging.WARNING)
 args = parser.parse_args()
 
@@ -39,7 +39,7 @@ logging.info(InfoSymbol + "Passed Arguments:")
 logging.info(InfoSymbol + "\tDIT File:      " + str(args.dit_file))
 logging.info(InfoSymbol + "\tCracked File:  " + str(args.cracked_file))
 logging.info(InfoSymbol + "\tUsername:      " + str(args.user))
-#logging.info(InfoSymbol + "\tOutput File:   " + str(args.output))
+logging.info(InfoSymbol + "\tOutput File:   " + str(args.output))
 logging.info(InfoSymbol + "\tVerbosity:     " + str(args.loglevel))
 
 # Attempt to open DIT and Cracked files
@@ -69,10 +69,17 @@ except IOError:
 opened_dit_file = sorted(opened_dit_file, key=str.casefold)
 opened_cracked_file = sorted(opened_cracked_file, key=str.casefold)
 
-# Check for Output vs User
-
 # If output, merge and quit
-    # For merge, check for file exists and ask for overwrite
+# Check for file exists and ask for overwrite
+OutputExists=os.path.exists(args.output)
+
+logging.info(InfoSymbol + "Attempting to open output file (" + args.output + ").")
+with open(args.output,wx) as Df:
+    for Dline in Df:
+        opened_dit_file.append(Dline)
+
+logging.info(InfoSymbol + "DIT file (" + args.output + ") successfully opened.")
+
     # Copy dit to tmp for processing
     # Strip computer accounts
     # Loop through cracked hash file and modify /tmp dit
@@ -81,12 +88,11 @@ opened_cracked_file = sorted(opened_cracked_file, key=str.casefold)
 
 # Make sure user exists in DIT
 foundcount = sum(args.user.lower() in s for s in ([x.lower() for x in  opened_dit_file]))
-print ()
 # Print Success if Found
 if foundcount > 0 :
-    logging.warning(SuccessSymbol + "Found " + str(foundcount) + " results!\n")
+    logging.info(SuccessSymbol + "Found " + str(foundcount) + " results!")
 else:
-    logging.warning(ErrorSymbol + "Found " + str(foundcount) + " results!\n")
+    logging.info(ErrorSymbol + "Found " + str(foundcount) + " results!")
     quit()
 
 # Loop through the DIT and get the line that has the matching user
@@ -101,11 +107,9 @@ for line in opened_dit_file:
                 userpass = (cline.rstrip('\n').split(':'))[1]
                 break
         # Print the user:hash or user:hash:pass
-        if userpass is "":
+        if userpass == "":
             userinfo = HashSymbol  + cutline[0] + ":" + Fore.YELLOW + cutline[3] + Style.RESET_ALL
         else:
             userinfo = SuccessSymbol + cutline[0] + ":" + Fore.GREEN + userpass + Style.RESET_ALL
         logging.warning(userinfo)
         userpass=""
-
-print()
