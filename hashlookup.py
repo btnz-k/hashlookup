@@ -71,14 +71,16 @@ opened_cracked_file = sorted(opened_cracked_file, key=str.casefold)
 
 # If output, merge and quit
 # Check for file exists and ask for overwrite
-OutputExists=os.path.exists(args.output)
+if str(args.output) != "None" :
+    OutputExists=os.path.exists(args.output)
+    logging.info(InfoSymbol + "Attempting to open output file (" + args.output + ").")
+    with open(args.output, mode='a+') as Df:
+        for Dline in Df:
+            opened_dit_file.append(Dline)
 
-logging.info(InfoSymbol + "Attempting to open output file (" + args.output + ").")
-with open(args.output,wx) as Df:
-    for Dline in Df:
-        opened_dit_file.append(Dline)
-
-logging.info(InfoSymbol + "DIT file (" + args.output + ") successfully opened.")
+    logging.info(InfoSymbol + "Output file (" + args.output + ") successfully opened.")
+else :
+    logging.info(InfoSymbol + "No output file selected, skipping.")
 
     # Copy dit to tmp for processing
     # Strip computer accounts
