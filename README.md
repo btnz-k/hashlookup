@@ -139,4 +139,4 @@ For the script to work correctly, your input files must be in the following form
 
 ## License
 
-This project is licensed under the MIT License.
+This project is licensed under the GPL-3.0 License.
