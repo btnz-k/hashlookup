@@ -24,16 +24,35 @@ This script is a significantly refactored and improved version of an earlier too
 ## Requirements
 
 * Python 3.x
-* `colorama` library for colored terminal output.
+* A virtual environment tool (like `venv`, included with Python 3)
 
 ---
 
 ## Installation
 
-1.  Clone or download the `hashlookup.py` script.
-2.  Install the `colorama` dependency using pip:
+This script uses a virtual environment to manage dependencies, which is a best practice for Python projects.
+
+1.  **Clone or Download the Repository**
+    If you have cloned the repository, navigate into its directory.
+
+2.  **Create and Activate a Virtual Environment**
+
+    * On macOS and Linux:
+        ```sh
+        python3 -m venv venv
+        source venv/bin/activate
+        ```
+    * On Windows:
+        ```sh
+        python -m venv venv
+        .\venv\Scripts\activate
+        ```
+    Your terminal prompt should now change to indicate you are in the `venv` environment.
+
+3.  **Install Dependencies**
+    Once the virtual environment is activated, install the required packages from the `requirements.txt` file:
     ```sh
-    pip install colorama
+    pip install -r requirements.txt
     ```
 
 ---
@@ -139,4 +158,4 @@ For the script to work correctly, your input files must be in the following form
 
 ## License
 
-This project is licensed under the GPL-3.0 License.
+This project is licensed under the GNU General Public License v3.0 (GPLv3).
